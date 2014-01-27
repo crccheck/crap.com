@@ -2,11 +2,14 @@ from flask import (
     Flask, render_template,
     redirect,
 )
+from flask.ext.sqlalchemy import SQLAlchemy
+
 
 from forms import SubmitEntry
 
 app = Flask(__name__)
 app.config.from_object('config')
+db = SQLAlchemy(app)
 
 @app.route('/')
 def homepage():
