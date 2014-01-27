@@ -4,6 +4,8 @@ Hello, Nurse!
   {{ form.csrf_token }}
   {{ form.spreadsheet_url.label }}
   {{ form.spreadsheet_url }}
-  {{ form.spreadsheet_url.errors }}
+  {% if form.spreadsheet_url.errors %}
+    {{ form.spreadsheet_url.errors }}
+  {% endif %}
   <input type="submit">
 </form>

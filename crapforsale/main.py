@@ -1,6 +1,8 @@
 from flask import (
-    Flask, render_template,
+    Flask,
+    render_template,
     redirect,
+    url_for,
 )
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -19,12 +21,18 @@ def homepage():
     return render_template('index.html', **data)
 
 
+@app.route('/done/')
+def crap():
+    return 'Crap'
+
+
 @app.route('/add/', methods=('POST', ))
 def addCrap():
     form = SubmitEntry()
     if form.validate_on_submit():
-        pass
-    return redirect('/')
+        return redirect(url_for('crap'))
+    # TODO how do I show erros without changing urls?
+    return render_template('index.html', form=form)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
