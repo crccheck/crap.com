@@ -1,7 +1,3 @@
-"""
-from crapforsale import db
-db.create_all()
-"""
 from . import db
 
 
