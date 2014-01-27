@@ -1,1 +1,8 @@
 Hello, Nurse!
+
+<form method="POST" action="{{ url_for('addCrap') }}">
+  {{ form.csrf_token }}
+  {{ form.spreadsheet_url.label }}
+  {{ form.spreadsheet_url }}
+  <input type="submit">
+</form>
