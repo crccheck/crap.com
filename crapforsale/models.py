@@ -1,4 +1,6 @@
 from peewee import Model, CharField
+from playhouse.postgres_ext import JSONField
+
 
 from . import db
 
@@ -21,5 +23,4 @@ class Spreadsheet(BaseModel):
 
 
 class Row(BaseModel):
-    pass
-    # data = db.Column(JSON) TODO
+    data = JSONField()

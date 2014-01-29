@@ -1,10 +1,10 @@
 
 from flask import Flask
-from peewee import PostgresqlDatabase
+from playhouse.postgres_ext import PostgresqlExtDatabase
 
 
 app = Flask(__name__)
 app.config.from_object('crapforsale.config')
-db = PostgresqlDatabase(**app.config['DATABASE'])
+db = PostgresqlExtDatabase(**app.config['DATABASE'])
 
 from .views import *
