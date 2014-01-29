@@ -1,3 +1,5 @@
+import urlparse
+
 from project_runpy import env
 
 
@@ -8,4 +10,12 @@ SECRET_KEY = env.get('SECRET')
 
 
 # DATABASE
-SQLALCHEMY_DATABASE_URI = env.get('DATABASE_URL')
+urlparse.uses_netloc.append('postgresql')
+url = urlparse.urlparse(env.get('DATABASE_URL'))
+DATABASE = {
+    'database': url.path[1:],
+    'user': url.username,
+    'password': url.password,
+    'host': url.hostname,
+    'port': url.port,
+}

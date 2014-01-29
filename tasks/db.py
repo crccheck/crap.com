@@ -6,59 +6,63 @@ from invoke import run, task
 
 
 # register schemes
-urlparse.uses_netloc.append('postgres')
 urlparse.uses_netloc.append('postgresql')
-urlparse.uses_netloc.append('postgis')
 
 
-def connect_bits(url):
+def connect_bits(db):
+    assert db['database']  # set your env variables!
+
     bits = []
-    url = urlparse.urlparse(url)
-    if url.username:
-        bits.extend(['-U', url.username])
-    if url.password:
+    if db['user']:
+        bits.extend(['-U', db['user']])
+    if db['password']:
         # TODO
         pass
-    if url.hostname:
-        bits.extend(['-h', url.hostname])
-    if url.port:
-        bits.extend(['-p', url.port])
-    path = url.path[1:]  # strip leading slash
-    return bits, path
+    if db['host']:
+        bits.extend(['-h', db['host']])
+    if db['port']:
+        bits.extend(['-p', db['port']])
+    return bits
+
+
+def pg_command(command, meta):
+    args = connect_bits(meta)
+    bits = [command] + args
+    command = ' '.join(bits)
+    return '{} {}'.format(command, meta['database'])
 
 
 @task
-def create_all():
+def create():
     """Create all postgres tables."""
-    from crapforsale import app, db
-    # import to load models
-    from crapforsale import models
+    from crapforsale.config import DATABASE
 
     # create database
-    args, path = connect_bits(app.config['SQLALCHEMY_DATABASE_URI'])
-    bits = ['createdb'] + args
-    command = ' '.join(bits)
-    run('{} {}'.format(command, path))
+    run(pg_command('createdb', DATABASE), echo=True)
 
-    db.create_all()
+    # make some models. ugh.
+    from crapforsale import models
+    thingy = [x for x in dir(models) if x [0] != '_']
+    thingy.remove('BaseModel')
+    for maybe in thingy:
+        hopefully = getattr(models, maybe)
+        try:
+            if issubclass(hopefully, models.BaseModel):
+                hopefully.create_table()
+        except TypeError:
+            pass
 
 
 @task
-def drop_all():
+def drop():
     """Drop all tables."""
-    from crapforsale import app
-    # import to load models
-    # from crapforsale import models
-    # db.drop_all()
+    from crapforsale.config import DATABASE
 
     # drop database, don't bother destroying tables
-    args, path = connect_bits(app.config['SQLALCHEMY_DATABASE_URI'])
-    bits = ['dropdb'] + args
-    command = ' '.join(bits)
-    run('{} {}'.format(command, path))
+    run(pg_command('dropdb', DATABASE), echo=True)
 
 
-@task(pre=['db.drop_all', 'db.create_all'])
+@task(pre=['db.drop', 'db.create'])
 def reset():
     """Re-create all tables, destroying any existing data."""
     pass
@@ -67,8 +71,6 @@ def reset():
 @task
 def shell():
     """Shell into the database."""
-    from crapforsale import app
-    args, path = connect_bits(app.config['SQLALCHEMY_DATABASE_URI'])
-    bits = ['psql'] + args
-    command = ' '.join(bits)
-    run('{} {}'.format(command, path), pty=True)
+    from crapforsale.config import DATABASE
+
+    run(pg_command('psql', DATABASE), echo=True, pty=True)

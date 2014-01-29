@@ -1,12 +1,25 @@
+from peewee import Model, CharField
+
 from . import db
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True)
+class BaseModel(Model):
+    class Meta:
+        database = db
 
-    def __init__(self, email):
-        self.email = email
 
-    def __repr__(self):
-        return self.email
+class User(BaseModel):
+    email = CharField(max_length=120, unique=True)
+
+
+class Spreadsheet(BaseModel):
+    name = CharField(127)
+    url = CharField(255, unique=True)
+    # user TODO
+    # created_at TODO
+    # updated_at TODO
+
+
+class Row(BaseModel):
+    pass
+    # data = db.Column(JSON) TODO

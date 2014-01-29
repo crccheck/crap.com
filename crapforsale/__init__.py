@@ -1,9 +1,10 @@
+
 from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
+from peewee import PostgresqlDatabase
 
 
 app = Flask(__name__)
 app.config.from_object('crapforsale.config')
-db = SQLAlchemy(app)
+db = PostgresqlDatabase(**app.config['DATABASE'])
 
 from .views import *
