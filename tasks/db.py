@@ -21,7 +21,7 @@ def connect_bits(db):
     if db['host']:
         bits.extend(['-h', db['host']])
     if db['port']:
-        bits.extend(['-p', db['port']])
+        bits.extend(['-p', str(db['port'])])
     return bits
 
 
