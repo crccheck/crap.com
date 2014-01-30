@@ -40,6 +40,9 @@ def create():
     # create database
     run(pg_command('createdb', DATABASE), echo=True)
 
+    # turn on HSTORE cuz i don't have a template
+    run('echo "CREATE EXTENSION hstore;" | ' + pg_command('psql', DATABASE), echo=True)
+
     # make some models. ugh.
     from crapforsale import models
     thingy = [x for x in dir(models) if x [0] != '_']
