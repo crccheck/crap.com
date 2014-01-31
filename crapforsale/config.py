@@ -5,6 +5,10 @@ from project_runpy import env
 
 DEBUG = True
 
+if env.get('ENVIRONMENT') == 'test':
+    # disable error catching during request handling for better error reports
+    TESTING = True
+
 SECRET_KEY = env.get('SECRET_KEY')
 
 
