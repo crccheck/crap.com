@@ -5,4 +5,4 @@ from invoke import run, task
 def repl():
     """Open an ipython session with all the models preloaded."""
     # for some reason, invoke.run craps out on sending quoted text
-    run("ipython -i -c 'from crapforsale.models import *'", pty=True)
+    run("ipython -i -c 'from craptobuy.models import *'", pty=True)

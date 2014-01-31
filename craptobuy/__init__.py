@@ -4,7 +4,7 @@ from playhouse.postgres_ext import PostgresqlExtDatabase
 
 
 app = Flask(__name__)
-app.config.from_object('crapforsale.config')
+app.config.from_object('craptobuy.config')
 db = PostgresqlExtDatabase(
         # let me be lazier
         autocommit=True,

@@ -1,3 +1,3 @@
-from crapforsale import app
+from craptobuy import app
 
 app.run(host='0.0.0.0')

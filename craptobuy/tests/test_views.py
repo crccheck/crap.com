@@ -20,7 +20,7 @@ class TestAddCrap(TestCase):
                 'ccc?key=0AvtWFMTdBQSLdFI3Y2M0RnI5OTBMa2FydXNFelBDTUE'}
         url = url_for('add_crap')
 
-        with mock.patch('crapforsale.views.parse_url') as g:
+        with mock.patch('craptobuy.views.parse_url') as g:
             c = app.test_client()
             response = c.post(url, data=form_data)
             self.assertEqual(response.status_code, 302)
