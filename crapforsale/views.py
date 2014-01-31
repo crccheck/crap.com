@@ -22,10 +22,9 @@ def crap():
 
 
 @app.route('/add/', methods=('POST', ))
-def addCrap():
+def add_crap():
     form = SubmitEntry()
     if form.validate_on_submit():
         return redirect(url_for('crap'))
     # TODO how do I show erros without changing urls?
     return render_template('index.html', form=form)
-
