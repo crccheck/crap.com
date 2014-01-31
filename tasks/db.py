@@ -1,25 +1,79 @@
-from invoke import task, Collection
+from __future__ import print_function
+
+import urlparse
+
+from invoke import run, task
+
+
+# register schemes
+urlparse.uses_netloc.append('postgresql')
+
+
+def connect_bits(db):
+    assert db['database']  # set your env variables!
+
+    bits = []
+    if db['user']:
+        bits.extend(['-U', db['user']])
+    if db['password']:
+        # TODO
+        pass
+    if db['host']:
+        bits.extend(['-h', db['host']])
+    if db['port']:
+        bits.extend(['-p', str(db['port'])])
+    return bits
+
+
+def pg_command(command, meta):
+    args = connect_bits(meta)
+    bits = [command] + args
+    command = ' '.join(bits)
+    return '{} {}'.format(command, meta['database'])
 
 
 @task
-def create_all():
-    """Create all tables."""
-    from crapforsale import db
-    # import to load models
+def create():
+    """Create all postgres tables."""
+    from crapforsale.config import DATABASE
+
+    # create database
+    run(pg_command('createdb', DATABASE), echo=True)
+
+    # turn on HSTORE cuz i don't have a template
+    run('echo "CREATE EXTENSION hstore;" | ' + pg_command('psql', DATABASE), echo=True)
+
+    # make some models. ugh.
     from crapforsale import models
-    db.create_all()
+    thingy = [x for x in dir(models) if x [0] != '_']
+    thingy.remove('BaseModel')
+    for maybe in thingy:
+        hopefully = getattr(models, maybe)
+        try:
+            if issubclass(hopefully, models.BaseModel):
+                hopefully.create_table()
+        except TypeError:
+            pass
 
 
 @task
-def drop_all():
+def drop():
     """Drop all tables."""
-    from crapforsale import db
-    # import to load models
-    from crapforsale import models
-    db.drop_all()
+    from crapforsale.config import DATABASE
+
+    # drop database, don't bother destroying tables
+    run(pg_command('dropdb', DATABASE), echo=True)
 
 
-@task(pre=['db.drop_all', 'db.create_all'])
+@task(pre=['db.drop', 'db.create'])
 def reset():
     """Re-create all tables, destroying any existing data."""
     pass
+
+
+@task
+def shell():
+    """Shell into the database."""
+    from crapforsale.config import DATABASE
+
+    run(pg_command('psql', DATABASE), echo=True, pty=True)
