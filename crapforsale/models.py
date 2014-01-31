@@ -1,4 +1,4 @@
-from peewee import Model, CharField
+from peewee import Model, CharField, ForeignKeyField
 from playhouse.postgres_ext import JSONField
 
 
@@ -14,7 +14,7 @@ class User(BaseModel):
     email = CharField(max_length=120, unique=True)
 
 
-class Spreadsheet(BaseModel):
+class Comparison(BaseModel):
     name = CharField(127)
     url = CharField(255, unique=True)
     # user TODO
@@ -22,5 +22,6 @@ class Spreadsheet(BaseModel):
     # updated_at TODO
 
 
-class Row(BaseModel):
+class Item(BaseModel):
     data = JSONField()
+    comparison = ForeignKeyField(Comparison, related_name='items')

@@ -3,10 +3,10 @@ from flask import (
     redirect,
     url_for,
 )
-from gspreadsheet import GSpreadsheet
 
 from . import app
 from .forms import SubmitEntry
+from .utils import parse_url
 
 
 @app.route('/')
@@ -26,11 +26,7 @@ def crap():
 def add_crap():
     form = SubmitEntry()
     if form.validate_on_submit():
-        sheet = GSpreadsheet(form.data['spreadsheet_url'])
-        # TODO save new Sheet object
-        for row in sheet:
-            # TODO save new Row object
-            pass
+        parse_url(form.data['spreadsheet_url'])
         return redirect(url_for('crap'))
     # WISHLIST how do I show erros without changing urls?
     return render_template('index.html', form=form)

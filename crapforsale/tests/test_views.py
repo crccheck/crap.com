@@ -1,4 +1,4 @@
-import unittest
+from unittest import TestCase
 
 from flask import url_for
 import mock
@@ -6,7 +6,7 @@ import mock
 from ..views import app, add_crap
 
 
-class TestAddCrap(unittest.TestCase):
+class TestAddCrap(TestCase):
     def setUp(self):
         self.view = add_crap
         self.ctx = app.test_request_context()
@@ -16,10 +16,11 @@ class TestAddCrap(unittest.TestCase):
         self.ctx.pop()
 
     def test_it_tries_to_get_a_spreadsheet(self):
-        form_data = {'spreadsheet_url': 'http://example.com/key=ff'}
+        form_data = {'spreadsheet_url': 'https://docs.google.com/spreadsheet/'
+                'ccc?key=0AvtWFMTdBQSLdFI3Y2M0RnI5OTBMa2FydXNFelBDTUE'}
         url = url_for('add_crap')
 
-        with mock.patch('crapforsale.views.GSpreadsheet') as g:
+        with mock.patch('crapforsale.views.parse_url') as g:
             c = app.test_client()
             response = c.post(url, data=form_data)
             self.assertEqual(response.status_code, 302)
