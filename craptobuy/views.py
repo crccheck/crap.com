@@ -18,9 +18,15 @@ def homepage():
     return render_template('index.html', **data)
 
 
-@app.route('/done/')
+@app.route('/crap/')
 def crap():
-    return 'Crap'
+    return redirect(url_for('crap_list'))
+
+
+@app.route('/craps/')
+def crap_list():
+    craps = Comparison.select()
+    return render_template('comparison_list.html', object_list=craps)
 
 
 @app.route('/add/', methods=('POST', ))
@@ -33,7 +39,7 @@ def add_crap():
     return render_template('index.html', form=form)
 
 
-@app.route('/crap/<int:pk>')
+@app.route('/crap/<int:pk>/')
 def crap_detail(pk):
     crap = Comparison.get(Comparison.id == pk)
     return render_template('comparison_detail.html', object=crap)

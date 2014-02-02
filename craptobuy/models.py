@@ -1,3 +1,4 @@
+from flask import url_for
 from peewee import Model, CharField, ForeignKeyField
 from playhouse.postgres_ext import JSONField
 
@@ -20,6 +21,12 @@ class Comparison(BaseModel):
     # user TODO
     # created_at TODO
     # updated_at TODO
+
+    def __repr__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return url_for('crap_detail', pk=self.id)
 
 
 class Item(BaseModel):

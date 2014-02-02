@@ -1,0 +1,5 @@
+<ul>
+  {% for crap in object_list %}
+    <a href="{{ crap.get_absolute_url() }}">{{ crap }}</a>
+  {% endfor %}
+</ul>
