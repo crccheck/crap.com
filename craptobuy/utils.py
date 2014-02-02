@@ -6,6 +6,9 @@ from .models import Comparison, Item
 def parse_url(url):
     sheet = GSpreadsheet(url)
 
-    comparison = Comparison(url=url)
+    comparison = Comparison.create(url=url, name=url)
     for row in sheet:
-        Item(comparison=comparison, data=row)
+        data = row.copy()  # to get this JSON serializable
+        Item.create(comparison=comparison, data=data)
+
+    return comparison.id
