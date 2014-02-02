@@ -5,7 +5,7 @@ Test
 <table>
   {% for item in object.items %}
     <tr>
-      {% for k, v in item.data.items() %}
+      {% for v in item.data.values() %}
         <td>
           {{ k }} {{ v }}
         </td>
@@ -14,8 +14,11 @@ Test
   {% endfor %}
   <thead>
     <tr>
+      {% for k in object.columns %}
       <th>
+        {{ k }}
       </th>
+      {% endfor %}
     </tr>
   </thead>
 </table>

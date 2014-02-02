@@ -28,6 +28,15 @@ class Comparison(BaseModel):
     def get_absolute_url(self):
         return url_for('crap_detail', pk=self.id)
 
+    #####################
+    # CUSTOM PROPERTIES #
+    #####################
+
+    @property
+    def columns(self):
+        return self.items.first().data.keys()
+
+
 
 class Item(BaseModel):
     data = JSONField()
