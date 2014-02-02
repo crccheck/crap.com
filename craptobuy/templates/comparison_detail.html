@@ -1,0 +1,21 @@
+Test
+<h1>{{ object.name }}</h1>
+<a href="{{ object.url }}">link</a>
+
+<table>
+  {% for item in object.items %}
+    <tr>
+      {% for k, v in item.data.items() %}
+        <td>
+          {{ k }} {{ v }}
+        </td>
+      {% endfor %}
+    </tr>
+  {% endfor %}
+  <thead>
+    <tr>
+      <th>
+      </th>
+    </tr>
+  </thead>
+</table>
