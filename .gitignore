@@ -1,3 +1,5 @@
 *.db
 *.pyc
 .env
+.sass-cache
+app.css
