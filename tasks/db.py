@@ -5,6 +5,13 @@ import urlparse
 from invoke import run, task
 
 
+MODELS = [
+    'User',
+    'Comparison',
+    'Item',
+]
+
+
 # register schemes
 urlparse.uses_netloc.append('postgresql')
 
@@ -33,8 +40,8 @@ def pg_command(command, meta):
 
 
 @task
-def create():
-    """Create all postgres tables."""
+def createdb():
+    """Create database."""
     from craptobuy.config import DATABASE
 
     # create database
@@ -43,16 +50,28 @@ def create():
     # turn on HSTORE cuz i don't have a template
     run('echo "CREATE EXTENSION hstore;" | ' + pg_command('psql', DATABASE), echo=True)
 
+
+@task
+def create():
+    """Create the tables."""
     # make some models. ugh.
     from craptobuy import models
-    models.User.create_table()
-    models.Comparison.create_table()
-    models.Item.create_table()
+    for model_name in MODELS:
+        getattr(models, model_name).create_table()
 
 
 @task
 def drop():
     """Drop all tables."""
+    from craptobuy import models
+    for model_name in reversed(MODELS):
+        # should I cascade=True ?
+        getattr(models, model_name).drop_table()
+
+
+@task
+def dropdb():
+    """Drop database."""
     from craptobuy.config import DATABASE
 
     # drop database, don't bother destroying tables
