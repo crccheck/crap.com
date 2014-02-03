@@ -1,20 +1,11 @@
-import logging
 import re
 
 from dateutil.parser import parse
 import requests
-from project_runpy import ColorizingStreamHandler
-
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-if not len(logger.handlers):
-    logger.addHandler(ColorizingStreamHandler())
 
 
 def _pull(*args):
     url = 'https://spreadsheets.google.com/feeds/{}?alt=json'
-    print url.format('/'.join(args))
     return requests.get(url.format('/'.join(args))).json()
 
 
