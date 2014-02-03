@@ -1,4 +1,5 @@
 import logging
+import re
 
 from dateutil.parser import parse
 import requests
@@ -117,3 +118,13 @@ def get_worksheet_cells(key, worksheet_id):
     spreadsheet.clean()
 
     return data
+
+
+def get_from_url(url):
+    key = re.search(r'key=([0-9a-zA-Z\-]+)', url).group(1)
+    try:
+        gid = int(re.search(r'#gid=(\d+)', url).group(1))
+    except AttributeError:
+        # missing
+        gid = 1
+    meta = get_worksheet_meta(key)
