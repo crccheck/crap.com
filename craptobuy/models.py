@@ -1,6 +1,6 @@
 from flask import url_for
 from peewee import Model, CharField, ForeignKeyField
-from playhouse.postgres_ext import JSONField
+from playhouse.postgres_ext import ArrayField
 
 
 from . import db
@@ -12,15 +12,20 @@ class BaseModel(Model):
 
 
 class User(BaseModel):
+    name = CharField(max_length=100)
     email = CharField(max_length=120, unique=True)
+
+    def __repr__(self):
+        return u'{} <{}>'.format(self.name, self.email)
 
 
 class Comparison(BaseModel):
     name = CharField(127)
     url = CharField(255, unique=True)
-    # user TODO
-    # created_at TODO
-    # updated_at TODO
+    header = ArrayField(CharField)
+    user = ForeignKeyField(User, null=True)
+    # created_at
+    # updated_at
 
     def __repr__(self):
         return self.name
@@ -37,7 +42,9 @@ class Comparison(BaseModel):
         return self.items.first().data.keys()
 
 
-
 class Item(BaseModel):
-    data = JSONField()
+    data = ArrayField(CharField)
     comparison = ForeignKeyField(Comparison, related_name='items')
+
+    def __repr__(self):
+        return u' '.join(self.data[:2])
