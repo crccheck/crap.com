@@ -13,6 +13,7 @@
   </head>
   <body>
     {% block body %}
+      {% include "includes/nav.html" %}
       <h1>{% block page_title %}{% endblock %}</h1>
       {% block main %}{% endblock %}
     {% endblock %}
