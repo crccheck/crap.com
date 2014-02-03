@@ -14,8 +14,10 @@
   <body>
     {% block body %}
       {% include "includes/nav.html" %}
-      <h1>{% block page_title %}{% endblock %}</h1>
-      {% block main %}{% endblock %}
+      <div class="container">
+        <h1>{% block page_title %}{% endblock %}</h1>
+        {% block main %}{% endblock %}
+      </div>
     {% endblock %}
   </body>
 </html>

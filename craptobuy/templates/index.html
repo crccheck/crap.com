@@ -11,6 +11,7 @@
     {% if form.spreadsheet_url.errors %}
       {{ form.spreadsheet_url.errors }}
     {% endif %}
-    <input type="submit">
+    <input type="submit"><br>
+    {{ form.spreadsheet_url.description }}
   </form>
 {% endblock %}

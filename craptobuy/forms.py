@@ -15,5 +15,6 @@ class SubmitEntry(Form):
         if not re.search(r'key', field.data):
             raise ValidationError('Not a Google Spreadsheet URL')
 
-    spreadsheet_url = URLField(validators=[
-            url(), validate_spreadsheet_url])
+    spreadsheet_url = URLField('Spreadsheet URL',
+            validators=[url(), validate_spreadsheet_url],
+            description='The URL to a publicly accessible Google spreadsheet.')
