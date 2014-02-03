@@ -14,6 +14,8 @@ from .utils import parse_url
 def homepage():
     data = {
         'form': SubmitEntry(),
+        'recent_craps':
+            Comparison.select().order_by(Comparison.modified.desc()).limit(10)
     }
     return render_template('index.html', **data)
 

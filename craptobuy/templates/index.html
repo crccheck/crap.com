@@ -4,14 +4,26 @@
 {% block page_title %}Crap to Buy{% endblock %}
 
 {% block main %}
-  <form method="POST" action="{{ url_for('add_crap') }}">
-    {{ form.csrf_token }}
-    {{ form.spreadsheet_url.label }}
-    {{ form.spreadsheet_url }}
-    {% if form.spreadsheet_url.errors %}
-      {{ form.spreadsheet_url.errors }}
-    {% endif %}
-    <input type="submit"><br>
-    {{ form.spreadsheet_url.description }}
-  </form>
+  <div class="module">
+    <h2>Add Crap</h2>
+    <form method="POST" action="{{ url_for('add_crap') }}">
+      {{ form.csrf_token }}
+      {{ form.spreadsheet_url.label }}
+      {{ form.spreadsheet_url }}
+      {% if form.spreadsheet_url.errors %}
+        {{ form.spreadsheet_url.errors }}
+      {% endif %}
+      <input type="submit"><br>
+      {{ form.spreadsheet_url.description }}
+    </form>
+  </div>
+
+  <div class="module">
+    <h2>Recent Crap</h2>
+    <ol>
+      {% for crap in recent_craps %}
+        <li><a href="{{ crap.get_absolute_url() }}"> {{ crap }} </a></li>
+      {% endfor %}
+    </ol>
+  </div>
 {% endblock %}
