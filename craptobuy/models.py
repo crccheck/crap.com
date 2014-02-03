@@ -1,7 +1,7 @@
 from flask import url_for
+from gcrap import get_worksheet_cells
 from peewee import Model, CharField, ForeignKeyField
 from playhouse.postgres_ext import ArrayField
-
 
 from . import db
 
@@ -47,6 +47,18 @@ class Comparison(BaseModel):
     @property
     def columns(self):
         return self.items.first().data.keys()
+
+    ##################
+    # CUSTOM METHODS #
+    ##################
+
+    def refresh(self):
+        """Re-pull data from the Google."""
+        qs = Item.delete().where(Item.comparison == self)
+        qs.execute()
+        sheet = get_worksheet_cells(self.key, self.worksheet_id)
+        for row in sheet['cells'].body:
+            Item.create(comparison=self, data=row)
 
 
 class Item(BaseModel):

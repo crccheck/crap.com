@@ -43,3 +43,10 @@ def add_crap():
 def crap_detail(pk):
     crap = Comparison.get(Comparison.id == pk)
     return render_template('comparison_detail.html', object=crap)
+
+
+@app.route('/crap/<int:pk>/refresh/', methods=('POST', ))
+def crap_refresh(pk):
+    crap = Comparison.get(Comparison.id == pk)
+    crap.refresh()
+    return redirect(url_for('crap_detail', pk=crap.id))
