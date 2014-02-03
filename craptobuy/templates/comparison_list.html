@@ -1,5 +1,12 @@
-<ul>
-  {% for crap in object_list %}
-    <a href="{{ crap.get_absolute_url() }}">{{ crap }}</a>
-  {% endfor %}
-</ul>
+{% extends "base.html" %}
+
+{% block head_title %}{% endblock %}
+{% block page_title %}List{% endblock %}
+
+{% block main %}
+  <ul>
+    {% for crap in object_list %}
+      <a href="{{ crap.get_absolute_url() }}">{{ crap }}</a>
+    {% endfor %}
+  </ul>
+{% endblock %}

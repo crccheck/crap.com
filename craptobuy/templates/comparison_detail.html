@@ -1,29 +1,34 @@
-Test
-<h1>{{ object.name }}</h1>
-<a href="{{ object.url }}">link</a>
+{% extends "base.html" %}
 
-<table>
-  <thead>
-    <tr>
-      {% for k in object.header %}
-      <th>
-        {{ k }}
-      </th>
-      {% endfor %}
-    </tr>
-  </thead>
-  {% for item in object.items %}
-    <tr>
-      {% for v in item.data %}
-        <td>
-          {{ v }}
-        </td>
-      {% endfor %}
-    </tr>
-  {% endfor %}
-</table>
+{% block head_title %}{{ object.name }}{% endblock %}
+{% block page_title %}{{ object.name }}{% endblock %}
+
+{% block main %}
+  <a href="{{ object.url }}">link</a>
+
+  <table>
+    <thead>
+      <tr>
+        {% for k in object.header %}
+        <th>
+          {{ k }}
+        </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    {% for item in object.items %}
+      <tr>
+        {% for v in item.data %}
+          <td>
+            {{ v }}
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
 
 
-<form action="{{ url_for('crap_refresh', pk=object.id) }}" method="POST">
-  <input type="submit" value="refresh">
-</form>
+  <form action="{{ url_for('crap_refresh', pk=object.id) }}" method="POST">
+    <input type="submit" value="refresh">
+  </form>
+{% endblock %}

@@ -1,11 +1,16 @@
-Hello, Nurse!
+{% extends "base.html" %}
 
-<form method="POST" action="{{ url_for('add_crap') }}">
-  {{ form.csrf_token }}
-  {{ form.spreadsheet_url.label }}
-  {{ form.spreadsheet_url }}
-  {% if form.spreadsheet_url.errors %}
-    {{ form.spreadsheet_url.errors }}
-  {% endif %}
-  <input type="submit">
-</form>
+{% block head_title %}Crap to Buy{% endblock %}
+{% block page_title %}Crap to Buy{% endblock %}
+
+{% block main %}
+  <form method="POST" action="{{ url_for('add_crap') }}">
+    {{ form.csrf_token }}
+    {{ form.spreadsheet_url.label }}
+    {{ form.spreadsheet_url }}
+    {% if form.spreadsheet_url.errors %}
+      {{ form.spreadsheet_url.errors }}
+    {% endif %}
+    <input type="submit">
+  </form>
+{% endblock %}
