@@ -7,10 +7,16 @@ def parse_url(url):
     sheet = get_from_url(url)
 
     try:
-        comparison = Comparison.get(url=url)
-        Item.delete().where(Item.comparison == comparison)
+        comparison = Comparison.get(
+            key=sheet['key'],
+            worksheet_id=sheet['worksheet_id'],
+        )
+        qs = Item.delete().where(Item.comparison == comparison)
+        qs.execute()
     except Comparison.DoesNotExist:
         comparison = Comparison.create(
+            key=sheet['key'],
+            worksheet_id=sheet['worksheet_id'],
             url=url,
             name=sheet['title'],
             header=sheet['cells'].header

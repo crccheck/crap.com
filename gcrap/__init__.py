@@ -99,7 +99,8 @@ def get_worksheet_cells(key, worksheet_id):
     for cell in feed['entry']:
         spreadsheet.import_cell(cell)
     data = {
-        'url': feed['id']['$t'],
+        'key': key,
+        'worksheet_id': worksheet_id,
         'updated_at': parse(feed['updated']['$t']),
         'title': feed['title']['$t'],
         'author_name': feed['author'][0]['name']['$t'],

@@ -21,11 +21,18 @@ class User(BaseModel):
 
 class Comparison(BaseModel):
     name = CharField(127)
-    url = CharField(255, unique=True)
+    key = CharField(70)  # key
+    worksheet_id = CharField(4)  # worksheet id
+    url = CharField(255)  # the url the user submitted
     header = ArrayField(CharField)
     user = ForeignKeyField(User, null=True, related_name='comparisons')
     # created_at
     # updated_at
+
+    class Meta:
+        indexes = (
+            (('key', 'worksheet_id'), True),
+        )
 
     def __repr__(self):
         return self.name
