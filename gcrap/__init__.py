@@ -119,12 +119,26 @@ def get_worksheet_cells(key, worksheet_id):
 
     return data
 
+def base36encode(number):
+    # http://stackoverflow.com/questions/1181919/python-base-36-encoding
+    alphabet = '0123456789abcdefghijklmnopqrstuvwxyz'
+
+    base36 = ''
+    while number:
+        number, i = divmod(number, 36)
+        base36 = alphabet[i] + base36
+
+    return base36 or alphabet[0]
+
 
 def get_from_url(url):
+    # http://stackoverflow.com/questions/11290337/how-to-convert-google-spreadsheets-worksheet-string-id-to-integer-index-gid
     key = re.search(r'key=([0-9a-zA-Z\-]+)', url).group(1)
     try:
         gid = int(re.search(r'#gid=(\d+)', url).group(1))
+        worksheet_id = base36encode(gid ^ 31578)
     except AttributeError:
         # missing
-        gid = 1
-    meta = get_worksheet_meta(key)
+        meta = get_worksheet_meta(key)
+        worksheet_id = meta['worksheets'][0]['id']
+    return get_worksheet_cells(key, worksheet_id)
