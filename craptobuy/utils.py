@@ -1,10 +1,10 @@
-from gspreadsheet import GSpreadsheet
+from gcrap import get_from_url
 
 from .models import Comparison, Item
 
 
 def parse_url(url):
-    sheet = GSpreadsheet(url)
+    sheet = get_from_url(url)
 
     try:
         comparison = Comparison.get(url=url)
@@ -12,10 +12,10 @@ def parse_url(url):
     except Comparison.DoesNotExist:
         comparison = Comparison.create(
             url=url,
-            name=sheet.feed.title.text,
+            name=sheet['title'],
+            header=sheet['cells'].header
         )
-    for row in sheet:
-        data = row.copy()  # to get this JSON serializable
-        Item.create(comparison=comparison, data=data)
+    for row in sheet['cells'].body:
+        Item.create(comparison=comparison, data=row)
 
     return comparison

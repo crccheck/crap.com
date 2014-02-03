@@ -45,15 +45,9 @@ def create():
 
     # make some models. ugh.
     from craptobuy import models
-    thingy = [x for x in dir(models) if x [0] != '_']
-    thingy.remove('BaseModel')
-    for maybe in thingy:
-        hopefully = getattr(models, maybe)
-        try:
-            if issubclass(hopefully, models.BaseModel):
-                hopefully.create_table()
-        except TypeError:
-            pass
+    models.User.create_table()
+    models.Comparison.create_table()
+    models.Item.create_table()
 
 
 @task

@@ -23,7 +23,7 @@ class Comparison(BaseModel):
     name = CharField(127)
     url = CharField(255, unique=True)
     header = ArrayField(CharField)
-    user = ForeignKeyField(User, null=True)
+    user = ForeignKeyField(User, null=True, related_name='comparisons')
     # created_at
     # updated_at
 

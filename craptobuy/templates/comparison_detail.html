@@ -3,22 +3,22 @@ Test
 <a href="{{ object.url }}">link</a>
 
 <table>
-  {% for item in object.items %}
-    <tr>
-      {% for v in item.data.values() %}
-        <td>
-          {{ k }} {{ v }}
-        </td>
-      {% endfor %}
-    </tr>
-  {% endfor %}
   <thead>
     <tr>
-      {% for k in object.columns %}
+      {% for k in object.header %}
       <th>
         {{ k }}
       </th>
       {% endfor %}
     </tr>
   </thead>
+  {% for item in object.items %}
+    <tr>
+      {% for v in item.data %}
+        <td>
+          {{ v }}
+        </td>
+      {% endfor %}
+    </tr>
+  {% endfor %}
 </table>
