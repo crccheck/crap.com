@@ -1,6 +1,8 @@
+import datetime
+
 from flask import url_for
 from gcrap import get_worksheet_cells
-from peewee import Model, CharField, ForeignKeyField
+from peewee import Model, CharField, DateTimeField, ForeignKeyField
 from playhouse.postgres_ext import ArrayField
 
 from . import db
@@ -26,8 +28,8 @@ class Comparison(BaseModel):
     url = CharField(255)  # the url the user submitted
     header = ArrayField(CharField)
     user = ForeignKeyField(User, null=True, related_name='comparisons')
-    # created_at
-    # updated_at
+    created = DateTimeField(default=datetime.datetime.now)
+    modified = DateTimeField()
 
     class Meta:
         indexes = (
@@ -39,6 +41,10 @@ class Comparison(BaseModel):
 
     def get_absolute_url(self):
         return url_for('crap_detail', pk=self.id)
+
+    def save(self, *args, **kwargs):
+        self.modified = datetime.datetime.now()
+        return super(Comparison, self).save(*args, **kwargs)
 
     #####################
     # CUSTOM PROPERTIES #
