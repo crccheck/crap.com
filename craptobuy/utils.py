@@ -6,10 +6,15 @@ from gcrap import get_from_url
 from .models import Comparison, AmazonProduct, Item
 
 
-asin_pattern = re.compile(r'http.*amazon.com.*/dp/(\w+)/',flags=re.IGNORECASE)
+ASIN_PATTERN = re.compile(r'http.*amazon.com.*/dp/(\w+)/',flags=re.IGNORECASE)
+
+
 def parse_url(url):
     sheet = get_from_url(url)
+    parse_sheet(sheet, url=url)
 
+
+def parse_sheet(sheet, url=None):
     try:
         comparison = Comparison.get(
             key=sheet['key'],
@@ -44,6 +49,6 @@ def find_asin(row):
     for col in row:
         if not col:
             continue
-        found = asin_pattern.match(col)
+        found = ASIN_PATTERN.match(col)
         if found:
             return found.group(1)

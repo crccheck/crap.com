@@ -69,11 +69,9 @@ class Comparison(BaseModel):
 
     def refresh(self):
         """Re-pull data from the Google."""
-        qs = Item.delete().where(Item.comparison == self)
-        qs.execute()
+        from craptobuy.utils import parse_sheet
         sheet = get_worksheet_cells(self.key, self.worksheet_id)
-        for row in sheet['cells'].body:
-            Item.create(comparison=self, data=row)
+        parse_sheet(sheet)
 
     def get_amazon_meta(self):
         # batch query ASINs that were extracted
