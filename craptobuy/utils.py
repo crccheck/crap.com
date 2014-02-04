@@ -29,7 +29,7 @@ def parse_url(url):
     for row in sheet['cells'].body:
         asin = find_asin(row)
         if asin:
-            product = AmazonProduct.create(asin=asin)
+            product = AmazonProduct.get_or_create(asin=asin)
         else:
             product = None
         Item.create(comparison=comparison, data=row,
