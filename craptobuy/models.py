@@ -189,7 +189,10 @@ class Item(BaseModel):
         )
         try:
             amazonproduct = AmazonProduct.get(asin=asin)
-            amazonproduct.update(**data).execute()
+            # Why can't I get amazonproduct.update() to work?!
+            for k, v in data.items():
+                setattr(amazonproduct, k, v)
+            amazonproduct.save()
         except AmazonProduct.DoesNotExist:
             amazonproduct = AmazonProduct.create(
                     asin=asin, **data)
