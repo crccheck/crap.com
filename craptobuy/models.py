@@ -97,7 +97,7 @@ class AmazonProduct(BaseModel):
     url = CharField(255, null=True)
     release_date = DateField(null=True)
     # `title`
-    title = CharField(255)
+    title = CharField(255, null=True)
 
     #############################
     # Other fields from the API #
