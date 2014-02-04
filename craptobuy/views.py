@@ -49,6 +49,15 @@ def crap_detail(pk):
 
 @app.route('/crap/<int:pk>/refresh/', methods=('POST', ))
 def crap_refresh(pk):
+    """Manually refresh spreadsheet."""
     crap = Comparison.get(Comparison.id == pk)
     crap.refresh()
+    return redirect(url_for('crap_detail', pk=crap.id))
+
+
+@app.route('/crap/<int:pk>/price/', methods=('POST', ))
+def crap_price(pk):
+    """Manually pull prices and thumbnail."""
+    crap = Comparison.get(Comparison.id == pk)
+    crap.get_amazon_meta()
     return redirect(url_for('crap_detail', pk=crap.id))

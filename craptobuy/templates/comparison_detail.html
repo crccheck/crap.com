@@ -47,4 +47,7 @@
   <form action="{{ url_for('crap_refresh', pk=object.id) }}" method="POST">
     <input type="submit" value="refresh">
   </form>
+  <form action="{{ url_for('crap_price', pk=object.id) }}" method="POST">
+    <input type="submit" value="get prices">
+  </form>
 {% endblock %}
