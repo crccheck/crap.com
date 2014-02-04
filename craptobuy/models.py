@@ -1,5 +1,6 @@
 import datetime
 
+import amazing
 from flask import url_for
 from gcrap import get_worksheet_cells
 from peewee import (
@@ -82,19 +83,19 @@ class AmazonProduct(BaseModel):
     # fields from the lookup api #
     ##############################
     # http://docs.aws.amazon.com/AWSECommerceService/latest/DG/CHAP_response_elements.html
-    brand = CharField(255)
-    label = CharField(255)
+    brand = CharField(255, null=True)
+    label = CharField(255, null=True)
     # `large_image_url` 500x500
-    image_large = CharField(255)
+    image_large = CharField(255, null=True)
     # `medium_image_url` 160x160
-    image_medium = CharField(255)
+    image_medium = CharField(255, null=True)
     # `manufacturer`, `publisher`
-    manufacturer = CharField(255)
+    manufacturer = CharField(255, null=True)
     # `model`, `mpn`, `part_number`
-    model = CharField(255)
+    model = CharField(255, null=True)
     # `offer_url`
-    url = CharField(255)
-    release_date = DateField()
+    url = CharField(255, null=True)
+    release_date = DateField(null=True)
     # `title`
     title = CharField(255)
 
@@ -118,7 +119,8 @@ class PriceHistory(BaseModel):
     retrieved = DateTimeField()
 
     def __repr__(self):
-        return u'{} {}'.format(self.asin, self.retrieved)
+        return u'{} {} {} ({})'.format(
+                self.asin, self.price, self.currency, self.retrieved)
 
 
 class Item(BaseModel):
@@ -130,3 +132,39 @@ class Item(BaseModel):
 
     def __repr__(self):
         return u' '.join(self.data[:2])
+
+    ##################
+    # CUSTOM METHODS #
+    ##################
+
+    def get_amazon_meta(self):
+        query = u' '.join(self.data[:2])
+        product = amazing.lookup(query)
+        asin = product.asin
+
+        try:
+            amazonproduct = AmazonProduct.get(asin=asin)
+        except AmazonProduct.DoesNotExist:
+            amazonproduct = AmazonProduct.create(
+                asin=asin,
+                brand=product.brand,
+                label=product.label,
+                image_large=product.large_image_url,
+                image_medium=product.medium_image_url,
+                manufacturer=product.manufacturer,
+                model=product.model,
+                url=product.offer_url,
+                release_date=product.release_date,
+                title=product.title,
+            )
+
+        if product.price_and_currency:
+            PriceHistory.create(
+                asin=amazonproduct,
+                price=product.price_and_currency[0],
+                currency=product.price_and_currency[1],
+                retrieved=datetime.datetime.now(),
+            )
+
+        self.asin = amazonproduct
+        self.save()
