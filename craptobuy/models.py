@@ -110,6 +110,17 @@ class AmazonProduct(BaseModel):
     def __repr__(self):
         return self.title
 
+    #####################
+    # CUSTOM PROPERTIES #
+    #####################
+
+    @property
+    def price(self):
+        return (self.asin.pricehistory
+            .order_by(PriceHistory.retrieved.desc())
+            .first().price
+        )
+
 
 class PriceHistory(BaseModel):
     # `price_and_currency`
