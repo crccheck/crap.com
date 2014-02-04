@@ -10,3 +10,6 @@ project-runpy==0.1.1
 psycopg2==2.5.2
 Werkzeug==0.9.4
 WTForms==1.0.5
+
+# amazon price tracking
+python-amazon-simple-product-api==1.4.0

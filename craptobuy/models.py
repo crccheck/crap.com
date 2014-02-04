@@ -2,7 +2,15 @@ import datetime
 
 from flask import url_for
 from gcrap import get_worksheet_cells
-from peewee import Model, CharField, DateTimeField, ForeignKeyField
+from peewee import (
+    Model,
+    BooleanField,
+    CharField,
+    DateField,
+    DateTimeField,
+    DecimalField,
+    ForeignKeyField,
+)
 from playhouse.postgres_ext import ArrayField
 
 from . import db
@@ -70,6 +78,48 @@ class Comparison(BaseModel):
 class Item(BaseModel):
     data = ArrayField(CharField)
     comparison = ForeignKeyField(Comparison, related_name='items')
+    retrieved = DateTimeField()
 
     def __repr__(self):
         return u' '.join(self.data[:2])
+
+
+class Product(BaseModel):
+    asin = CharField(primary=True)
+    active = BooleanField(default=True)
+    ##############################
+    # fields from the lookup api #
+    ##############################
+    # http://docs.aws.amazon.com/AWSECommerceService/latest/DG/CHAP_response_elements.html
+    brand = CharField(255)
+    label = CharField(255)
+    # `large_image_url` 500x500
+    image_large = CharField(255)
+    # `medium_image_url` 160x160
+    image_medium = CharField(255)
+    # `manufacturer`, `publisher`
+    manufacturer = CharField(255)
+    # `model`, `mpn`, `part_number`
+    model = CharField(255)
+    # `offer_url`
+    url = CharField(255)
+    release_date = DateField()
+    # `title`
+    title = CharField(255)
+
+    #############################
+    # Other fields from the API #
+    #############################
+    # `small_image_url` 75x75
+    # `tiny_image_url`
+    # `upc`
+    # `features`
+
+
+
+class PriceHistory(BaseModel):
+    # `price_and_currency`
+    asin = ForeignKeyField(Product)
+    price = DecimalField(decimal_places=2)
+    currency = CharField(10)
+    retrieved = DateTimeField()
