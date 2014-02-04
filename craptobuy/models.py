@@ -174,21 +174,23 @@ class Item(BaseModel):
 
     def store_amazon_meta(self, product):
         asin = product.asin
+        data = dict(
+            brand=product.brand,
+            label=product.label,
+            image_large=product.large_image_url,
+            image_medium=product.medium_image_url,
+            manufacturer=product.manufacturer,
+            model=product.model,
+            url=product.offer_url,
+            release_date=product.release_date,
+            title=product.title,
+        )
         try:
             amazonproduct = AmazonProduct.get(asin=asin)
+            amazonproduct.update(**data).execute()
         except AmazonProduct.DoesNotExist:
             amazonproduct = AmazonProduct.create(
-                asin=asin,
-                brand=product.brand,
-                label=product.label,
-                image_large=product.large_image_url,
-                image_medium=product.medium_image_url,
-                manufacturer=product.manufacturer,
-                model=product.model,
-                url=product.offer_url,
-                release_date=product.release_date,
-                title=product.title,
-            )
+                    asin=asin, **data)
 
         if product.price_and_currency and all(product.price_and_currency):
             PriceHistory.create(
