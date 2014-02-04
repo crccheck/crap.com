@@ -75,17 +75,8 @@ class Comparison(BaseModel):
             Item.create(comparison=self, data=row)
 
 
-class Item(BaseModel):
-    data = ArrayField(CharField)
-    comparison = ForeignKeyField(Comparison, related_name='items')
-    retrieved = DateTimeField()
-
-    def __repr__(self):
-        return u' '.join(self.data[:2])
-
-
-class Product(BaseModel):
-    asin = CharField(primary=True)
+class AmazonProduct(BaseModel):
+    asin = CharField(max_length=20, primary_key=True)
     active = BooleanField(default=True)
     ##############################
     # fields from the lookup api #
@@ -115,11 +106,27 @@ class Product(BaseModel):
     # `upc`
     # `features`
 
+    def __repr__(self):
+        return self.title
 
 
 class PriceHistory(BaseModel):
     # `price_and_currency`
-    asin = ForeignKeyField(Product)
+    asin = ForeignKeyField(AmazonProduct, related_name='pricehistory')
     price = DecimalField(decimal_places=2)
     currency = CharField(10)
     retrieved = DateTimeField()
+
+    def __repr__(self):
+        return u'{} {}'.format(self.asin, self.retrieved)
+
+
+class Item(BaseModel):
+    """An item in a comparison."""
+    data = ArrayField(CharField)
+    comparison = ForeignKeyField(Comparison, related_name='items')
+    retrieved = DateTimeField()
+    asin = ForeignKeyField(AmazonProduct, related_name='items', null=True)
+
+    def __repr__(self):
+        return u' '.join(self.data[:2])

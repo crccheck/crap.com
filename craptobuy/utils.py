@@ -1,3 +1,5 @@
+import datetime
+
 from gcrap import get_from_url
 
 from .models import Comparison, Item
@@ -19,9 +21,11 @@ def parse_url(url):
             worksheet_id=sheet['worksheet_id'],
             url=url,
             name=sheet['title'],
-            header=sheet['cells'].header
+            header=sheet['cells'].header,
+            modified=datetime.datetime.now(),
         )
     for row in sheet['cells'].body:
-        Item.create(comparison=comparison, data=row)
+        Item.create(comparison=comparison, data=row,
+                retrieved=datetime.datetime.now())
 
     return comparison

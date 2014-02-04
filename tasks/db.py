@@ -8,6 +8,8 @@ from invoke import run, task
 MODELS = [
     'User',
     'Comparison',
+    'AmazonProduct',
+    'PriceHistory',
     'Item',
 ]
 
@@ -66,7 +68,7 @@ def drop():
     from craptobuy import models
     for model_name in reversed(MODELS):
         # should I cascade=True ?
-        getattr(models, model_name).drop_table()
+        getattr(models, model_name).drop_table(fail_silently=True)
 
 
 @task
