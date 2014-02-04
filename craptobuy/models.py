@@ -79,9 +79,11 @@ class Comparison(BaseModel):
         # batch query ASINs that were extracted
         almost_items = (self.items.join(AmazonProduct)
                 .where(AmazonProduct.title >> None))
-        datas = amazing.lookup_many([x.asin.asin for x in almost_items])
-        for item, data in zip(almost_items, datas):
-            item.store_amazon_meta(data)
+        asins = [x.asin.asin for x in almost_items]
+        if asins:
+            datas = amazing.lookup_many(asins)
+            for item, data in zip(almost_items, datas):
+                item.store_amazon_meta(data)
         # lookup the rest one by one
         naked_items = self.items.where(Item.asin >> None)
         for item in naked_items:
