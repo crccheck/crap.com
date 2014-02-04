@@ -29,7 +29,11 @@
         </td>
         {% for v in item.data %}
           <td>
-            {{ v }}
+            {% if v %}
+              {{ v }}
+            {% else %}
+              &nbsp;
+            {% endif %}
           </td>
         {% endfor %}
         <td>
