@@ -75,6 +75,18 @@ class Comparison(BaseModel):
         for row in sheet['cells'].body:
             Item.create(comparison=self, data=row)
 
+    def get_amazon_meta(self):
+        # batch query ASINs that were extracted
+        almost_items = (self.items.join(AmazonProduct)
+                .where(AmazonProduct.title >> None))
+        datas = amazing.lookup_many([x.asin.asin for x in almost_items])
+        for item, data in zip(almost_items, datas):
+            item.store_amazon_meta(data)
+        # lookup the rest one by one
+        naked_items = self.items.where(Item.asin >> None)
+        for item in naked_items:
+            item.get_amazon_meta()
+
 
 class AmazonProduct(BaseModel):
     asin = CharField(max_length=20, primary_key=True)
@@ -108,7 +120,7 @@ class AmazonProduct(BaseModel):
     # `features`
 
     def __repr__(self):
-        return self.title
+        return self.title or self.asin
 
     #####################
     # CUSTOM PROPERTIES #
@@ -160,11 +172,8 @@ class Item(BaseModel):
     # CUSTOM METHODS #
     ##################
 
-    def get_amazon_meta(self):
-        query = u' '.join(self.data[:2])
-        product = amazing.lookup(query)
+    def store_amazon_meta(self, product):
         asin = product.asin
-
         try:
             amazonproduct = AmazonProduct.get(asin=asin)
         except AmazonProduct.DoesNotExist:
@@ -181,7 +190,7 @@ class Item(BaseModel):
                 title=product.title,
             )
 
-        if product.price_and_currency:
+        if product.price_and_currency and all(product.price_and_currency):
             PriceHistory.create(
                 asin=amazonproduct,
                 price=product.price_and_currency[0],
@@ -191,3 +200,7 @@ class Item(BaseModel):
 
         self.asin = amazonproduct
         self.save()
+
+    def get_amazon_meta(self):
+        query = u' '.join(self.data[:2])
+        self.store_amazon_meta(amazing.lookup(query))

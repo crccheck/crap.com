@@ -32,3 +32,9 @@ def lookup(query):
     amazon = get_api()
     products = amazon.search_n(1, Keywords=query, SearchIndex='All')
     return products[0]
+
+
+def lookup_many(asin_list):
+    amazon = get_api()
+    query = ','.join(asin_list)
+    return amazon.lookup(ItemId=query)
