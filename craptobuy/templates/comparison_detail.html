@@ -9,20 +9,32 @@
   <table>
     <thead>
       <tr>
+        <th>Image</th>
         {% for k in object.header %}
         <th>
           {{ k }}
         </th>
         {% endfor %}
+        <th>Price</th>
       </tr>
     </thead>
     {% for item in object.items %}
       <tr>
+        <td>
+          {% if item.asin.image_medium %}
+            <a href="{{ item.asin.url }}" target="_blank" title="{{ item.asin }}">
+              <img src="{{ item.asin.image_medium }}" alt="">
+            </a>
+          {% endif %}
+        </td>
         {% for v in item.data %}
           <td>
             {{ v }}
           </td>
         {% endfor %}
+        <td>
+          {{ item.price }}
+        </td>
       </tr>
     {% endfor %}
   </table>

@@ -133,6 +133,18 @@ class Item(BaseModel):
     def __repr__(self):
         return u' '.join(self.data[:2])
 
+    #####################
+    # CUSTOM PROPERTIES #
+    #####################
+
+    @property
+    def price(self):
+        return (self.asin.pricehistory
+            .order_by(PriceHistory.retrieved.desc())
+            .first().price
+        )
+
+
     ##################
     # CUSTOM METHODS #
     ##################
