@@ -77,7 +77,7 @@ def dropdb():
     from craptobuy.config import DATABASE
 
     # drop database, don't bother destroying tables
-    run(pg_command('dropdb', DATABASE), echo=True)
+    run(pg_command('dropdb', DATABASE), warn=True, echo=True)
 
 
 @task(pre=['db.drop', 'db.create'])
