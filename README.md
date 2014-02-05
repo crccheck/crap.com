@@ -1,8 +1,4 @@
-[![Stories in Ready](https://badge.waffle.io/crccheck/crap.com.png?label=ready)](https://waffle.io/crccheck/crap.com)
-Issues managed through waffle.io:
-
-https://waffle.io/crccheck/crap.com
-
+Issues managed through waffle.io: [![Stories in Ready](https://badge.waffle.io/crccheck/crap.com.png?label=ready)](https://waffle.io/crccheck/crap.com)
 
 
 
