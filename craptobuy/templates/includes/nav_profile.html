@@ -1,4 +1,5 @@
 <a href="{{ url_for('whoami') }}">
+  {# TODO don't touch session because caching #}
   {% if session['user']['picture'] %}
     <img src="{{ session['user']['picture'] }}" alt="">
   {% endif %}

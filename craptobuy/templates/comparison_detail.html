@@ -4,7 +4,10 @@
 {% block page_title %}{{ object.name }}{% endblock %}
 
 {% block main %}
-  <a href="{{ object.url }}">link</a>
+  {# TODO don't touch session because caching #}
+  {% if object.author_email == session['user']['email'] %}
+    <a href="{{ object.url }}">source spreadsheet</a>
+  {% endif %}
 
   <table>
     <thead>
