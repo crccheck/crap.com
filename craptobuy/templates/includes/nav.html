@@ -1,10 +1,14 @@
-<div class="nav">
-  <a href="/"><strong>Crap</strong></a>
-  <a href="{{ url_for('crap_list') }}">All</a>
-  {% if session['user'] %}
-    Logged in as: <a href="{{ url_for('whoami') }}">{{ session['user']['name'] }}</a>
-    <a href="{{ url_for('logout') }}">Logout</a>
-  {% else %}
-    <a href="{{ url_for('login') }}">Login</a>
-  {% endif %}
+<div class="topbar">
+  <div class="nav">
+    <a href="/"><strong>Crap</strong></a>
+    <a href="{{ url_for('crap_list') }}">All</a>
+  </div>
+  <div class="account">
+    {% if session['user'] %}
+      {% include "includes/nav_profile.html" %}
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+    {% endif %}
+  </div>
 </div>

@@ -1,0 +1,10 @@
+<a href="{{ url_for('whoami') }}">
+  {% if session['user']['picture'] %}
+    <img src="{{ session['user']['picture'] }}" alt="">
+  {% endif %}
+  {% if session['user']['name'] %}
+    {{ session['user']['name'] }}
+  {% else %}
+    {{ session['user']['email'] }}
+  {% endif %}
+</a>

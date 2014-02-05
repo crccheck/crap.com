@@ -1,14 +1,27 @@
+.topbar
+  +clearfix
+  a, a:visited
+    color: black
+
 .nav
-  background: blanchedalmond
+  float: left
   font-size: 0.9em
   a
-    display: inline-block
+    background: blanchedalmond
+    display: block
+    float: left
     padding: 0.5em 0.5em
     text-decoration: none
     &:hover
       background: palegreen
-  a, a:visited
-    color: black
+
+.account
+  float: right
+  a
+    display: block
+    text-decoration: none
+  img
+    height: 1em
 
 
 .module
