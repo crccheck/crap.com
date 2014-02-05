@@ -22,21 +22,13 @@ class BaseModel(Model):
         database = db
 
 
-class User(BaseModel):
-    name = CharField(max_length=100)
-    email = CharField(max_length=120, unique=True)
-
-    def __repr__(self):
-        return u'{} <{}>'.format(self.name, self.email)
-
-
 class Comparison(BaseModel):
     name = CharField(127)
     key = CharField(70)  # key
     worksheet_id = CharField(4)  # worksheet id
     url = CharField(255)  # the url the user submitted
     header = ArrayField(CharField)
-    user = ForeignKeyField(User, null=True, related_name='comparisons')
+    author_email = CharField(255, null=True)
     created = DateTimeField(default=datetime.datetime.now)
     modified = DateTimeField()
 

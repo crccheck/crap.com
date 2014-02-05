@@ -6,7 +6,6 @@ from invoke import run, task
 
 
 MODELS = [
-    'User',
     'Comparison',
     'AmazonProduct',
     'PriceHistory',

@@ -11,7 +11,7 @@ ASIN_PATTERN = re.compile(r'http.*amazon.com.*/dp/(\w+)/',flags=re.IGNORECASE)
 
 def parse_url(url):
     sheet = get_from_url(url)
-    parse_sheet(sheet, url=url)
+    return parse_sheet(sheet, url=url)
 
 
 def parse_sheet(sheet, url=None):
@@ -27,6 +27,7 @@ def parse_sheet(sheet, url=None):
             key=sheet['key'],
             worksheet_id=sheet['worksheet_id'],
             url=url,
+            author_email=sheet['author_email'],
             name=sheet['title'],
             header=sheet['cells'].header,
             modified=datetime.datetime.now(),
