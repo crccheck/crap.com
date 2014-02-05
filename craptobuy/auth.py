@@ -21,7 +21,8 @@ google = oauth.remote_app(
     authorize_url='https://accounts.google.com/o/oauth2/auth',
 )
 
-@app.route('/account')
+
+@app.route('/account/')
 def whoami():
     if 'google_token' in session:
         me = google.get('userinfo')
@@ -29,18 +30,19 @@ def whoami():
     return redirect(url_for('login'))
 
 
-@app.route('/login')
+@app.route('/login/')
 def login():
     return google.authorize(callback=url_for('authorized', _external=True))
 
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     session.pop('google_token', None)
-    return redirect(url_for('index'))
+    session.pop('user', None)
+    return redirect(url_for('homepage'))
 
 
-@app.route('/oauth2callback')
+@app.route('/oauth2callback/')
 @google.authorized_handler
 def authorized(resp):
     if resp is None:
@@ -49,8 +51,8 @@ def authorized(resp):
             request.args['error_description']
         )
     session['google_token'] = (resp['access_token'], '')
-    me = google.get('userinfo')
-    return jsonify({"data": me.data})
+    session['user'] = google.get('userinfo').data
+    return redirect(url_for('homepage'))
 
 
 @google.tokengetter
