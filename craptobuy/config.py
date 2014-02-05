@@ -19,6 +19,10 @@ DATABASE = {
     'port': url.port,
 }
 
+# OAuth
+# https://github.com/lepture/flask-oauthlib/blob/master/example/google.py
+GOOGLE_ID = env.get('GOOGLE_ID')
+GOOGLE_SECRET = env.get('GOOGLE_SECRET')
 
 if env.get('ENVIRONMENT') == 'test':
     # disable error catching during request handling for better error reports

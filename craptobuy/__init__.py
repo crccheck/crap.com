@@ -11,4 +11,5 @@ db = PostgresqlExtDatabase(
         autorollback=True,
         **app.config['DATABASE'])
 
+from .auth import *
 from .views import *
