@@ -1,8 +1,6 @@
 import datetime
 
-import amazing
 from flask import url_for
-from gcrap import get_worksheet_cells
 from peewee import (
     Model,
     BooleanField,
@@ -15,6 +13,8 @@ from peewee import (
 from playhouse.postgres_ext import ArrayField
 
 from . import db
+from .lib import amazing
+from .lib.gcrap import get_worksheet_cells
 
 
 class BaseModel(Model):

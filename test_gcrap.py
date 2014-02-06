@@ -3,8 +3,8 @@ from unittest import TestCase
 
 import mock
 
-import gcrap
-from gcrap import get_from_url
+from craptobuy.lib import gcrap
+from craptobuy.lib.gcrap import get_from_url
 
 
 class GetFromUrlTest(TestCase):

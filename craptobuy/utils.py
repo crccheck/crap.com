@@ -1,7 +1,7 @@
 import datetime
 import re
 
-from gcrap import get_from_url
+from .lib.gcrap import get_from_url
 
 from .models import Comparison, AmazonProduct, Item
 
