@@ -6,8 +6,8 @@ from .. import utils
 
 class ParseSheetTest(TestCase):
     """parse_sheet()"""
-    def test_stuff_happens(self):
-        # setup
+
+    def setUp(self):
         mock_sheet = {}
         mock_sheet['key'] = 'foobar'
         mock_sheet['worksheet_id'] = 'od6'
@@ -17,14 +17,28 @@ class ParseSheetTest(TestCase):
         mock_sheet['cells'] = mock_data
         mock_data.header = ['h1', 'h2']
         mock_data.body = []
+        self.sheet = mock_sheet
+        self.data = mock_data
 
-        comparison = utils.parse_sheet(mock_sheet, 'http://foobar')
+    def test_comparison_is_created(self):
+        comparison = utils.parse_sheet(self.sheet, 'http://foobar')
 
         # assert comparison was made
         self.assertTrue(comparison)
         # assert comparison is in the database
         self.assertTrue(comparison.id)
 
+    def test_rows_are_saved(self):
+        # test setup
+        self.data.body = [
+            ['1'],
+            ['2'],
+            ['3'],
+            ['4'],
+        ]
+
+        comparison = utils.parse_sheet(self.sheet, 'http://foobar')
+        self.assertEqual(comparison.items.count(), 4)
 
 
 class FindASINTest(TestCase):
