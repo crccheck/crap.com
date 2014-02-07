@@ -1,28 +1,30 @@
-import random
-
 from unittest import TestCase
 import mock
 
 from .. import utils
 
 
-class ParseUrlTest(TestCase):
+class ParseSheetTest(TestCase):
+    """parse_sheet()"""
     def test_stuff_happens(self):
-        n_items = random.randint(5, 10)
-        # mock_gsheet = mock.MagicMock()
-        # mock_gsheet.return_value = range(n_items)
-        # mock_comparison = mock.MagicMock()
-        # mock_item = mock.MagicMock()
+        # setup
+        mock_sheet = {}
+        mock_sheet['key'] = 'foobar'
+        mock_sheet['worksheet_id'] = 'od6'
+        mock_sheet['author_email'] = 'dummy@example.com'
+        mock_sheet['title'] = 'sheet title'
+        mock_data = mock.MagicMock()
+        mock_sheet['cells'] = mock_data
+        mock_data.header = ['h1', 'h2']
+        mock_data.body = []
 
-        # with mock.patch.multiple(utils,
-        #         GSpreadsheet=mock_gsheet,
-        #         Comparison=mock_comparison,
-        #         Item=mock_item):
-        #     utils.parse_url('foobar')
+        comparison = utils.parse_sheet(mock_sheet, 'http://foobar')
 
-        # mock_gsheet.assert_called_once_with('foobar')
-        # self.assertEqual(mock_comparison.call_count, 1)
-        # self.assertEqual(mock_item.call_count, n_items)
+        # assert comparison was made
+        self.assertTrue(comparison)
+        # assert comparison is in the database
+        self.assertTrue(comparison.id)
+
 
 
 class FindASINTest(TestCase):
