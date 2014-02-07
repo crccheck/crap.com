@@ -44,12 +44,14 @@ def parse_sheet(sheet, url=None):
         )
     for row in sheet['cells'].body:
         asin = find_asin(row)
+        hash = datahash(row)
         if asin:
             product = AmazonProduct.get_or_create(asin=asin)
         else:
             product = None
         Item.create(comparison=comparison, data=row,
                 asin=product,
+                hash=hash,
                 retrieved=import_start)
 
     return comparison

@@ -142,8 +142,11 @@ class Item(BaseModel):
     """An item in a comparison."""
     data = ArrayField(CharField)
     comparison = ForeignKeyField(Comparison, related_name='items')
-    retrieved = DateTimeField()
+    # extra meta field
     asin = ForeignKeyField(AmazonProduct, related_name='items', null=True)
+    # bookkeeping fields
+    hash = CharField(8)
+    retrieved = DateTimeField()
 
     def __repr__(self):
         return u' '.join(self.data[:2])
