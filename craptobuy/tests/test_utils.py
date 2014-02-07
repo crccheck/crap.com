@@ -47,6 +47,23 @@ class ParseSheetTest(TestCase):
         comparison = utils.parse_sheet(self.sheet, 'http://foobar')
         self.assertEqual(comparison.items.count(), 4)
 
+    def test_repeated_runs_clear_old_rows(self):
+        self.data.body = [
+            ['1'],
+            ['2'],
+            ['3'],
+            ['4'],
+        ]
+        comparison = utils.parse_sheet(self.sheet, 'http://foobar')
+
+        self.data.body = [
+            ['5'],
+            ['6'],
+        ]
+        comparison = utils.parse_sheet(self.sheet, 'http://foobar')
+
+        self.assertEqual(comparison.items.count(), 2)
+
 
 class FindASINTest(TestCase):
     def test_it_works(self):

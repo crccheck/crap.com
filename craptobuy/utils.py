@@ -15,6 +15,7 @@ def parse_url(url):
 
 
 def parse_sheet(sheet, url=None):
+    import_start = datetime.datetime.now()
     try:
         comparison = Comparison.get(
             key=sheet['key'],
@@ -30,7 +31,7 @@ def parse_sheet(sheet, url=None):
             author_email=sheet['author_email'],
             name=sheet['title'],
             header=sheet['cells'].header,
-            modified=datetime.datetime.now(),
+            modified=import_start,
         )
     for row in sheet['cells'].body:
         asin = find_asin(row)
@@ -40,7 +41,7 @@ def parse_sheet(sheet, url=None):
             product = None
         Item.create(comparison=comparison, data=row,
                 asin=product,
-                retrieved=datetime.datetime.now())
+                retrieved=import_start)
 
     return comparison
 
