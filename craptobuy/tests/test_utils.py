@@ -1,6 +1,7 @@
 from unittest import TestCase
 import mock
 
+from .. import models
 from .. import utils
 
 
@@ -19,6 +20,12 @@ class ParseSheetTest(TestCase):
         mock_data.body = []
         self.sheet = mock_sheet
         self.data = mock_data
+
+    def tearDown(self):
+        # clear all comparisons and items
+        for c in models.Comparison.select():
+            c.delete_instance(recursive=True)
+
 
     def test_comparison_is_created(self):
         comparison = utils.parse_sheet(self.sheet, 'http://foobar')
