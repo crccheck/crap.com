@@ -1,5 +1,6 @@
 import datetime
 import re
+from hashlib import md5
 
 from .lib.gcrap import get_from_url
 
@@ -12,6 +13,14 @@ ASIN_PATTERN = re.compile(r'http.*amazon.com.*/dp/(\w+)/',flags=re.IGNORECASE)
 def parse_url(url):
     sheet = get_from_url(url)
     return parse_sheet(sheet, url=url)
+
+
+def datahash(row):
+    """Get a hash for a row of data."""
+    m = md5()
+    for x in row:
+        m.update(x)
+    return m.hexdigest()[:8]
 
 
 def parse_sheet(sheet, url=None):

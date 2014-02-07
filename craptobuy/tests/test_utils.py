@@ -5,6 +5,20 @@ from .. import models
 from .. import utils
 
 
+class DatahashTest(TestCase):
+    """datahash()"""
+    def test_it_runs(self):
+        row = ['a', 'b', 'c']
+        self.assertTrue(utils.datahash(row))
+
+    def test_update_concatenate_same_diff(self):
+        row = ['a', 'b', 'c']
+        h1 = utils.datahash(row)
+        self.assertEqual(utils.datahash(['abc']), h1)
+        self.assertEqual(utils.datahash(['a', 'bc']), h1)
+        self.assertEqual(utils.datahash(['ab', 'c']), h1)
+
+
 class ParseSheetTest(TestCase):
     """parse_sheet()"""
 
