@@ -42,16 +42,27 @@ def parse_sheet(sheet, url=None):
             modified=import_start,
         )
     for row in sheet['cells'].body:
-        asin = find_asin(row)
         hash = datahash(row)
-        if asin:
-            product = AmazonProduct.get_or_create(asin=asin)
+        try:
+            existing_item = comparison.items.where(Item.hash == hash).first()
+        except Item.DoesNotExist:
+            existing_item = None
+
+        if existing_item:
+            # this could be a little more efficient if we deferred these to
+            # an update query
+            existing_item.retrieved = import_start
+            existing_item.save()
         else:
-            product = None
-        Item.create(comparison=comparison, data=row,
-                asin=product,
-                hash=hash,
-                retrieved=import_start)
+            asin = find_asin(row)
+            if asin:
+                product = AmazonProduct.get_or_create(asin=asin)
+            else:
+                product = None
+            Item.create(comparison=comparison, data=row,
+                    asin=product,
+                    hash=hash,
+                    retrieved=import_start)
     Item.delete().where(Item.comparison == comparison and
             Item.retrieved < import_start).execute()
 

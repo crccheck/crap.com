@@ -82,6 +82,21 @@ class ParseSheetTest(TestCase):
 
         self.assertEqual(comparison.items.count(), 2)
 
+    def test_repeated_runs_preserves_unchanged_rows(self):
+        self.data.body = [
+            ['1', ],
+        ]
+        comparison = utils.parse_sheet(self.sheet, 'http://foobar')
+
+        asin = models.AmazonProduct.create(asin='poop')
+        item = comparison.items.first()
+        item.asin = asin
+        item.save()
+
+        comparison = utils.parse_sheet(self.sheet, 'http://foobar')
+        item = comparison.items.first()
+        self.assertEqual(item.asin, asin)
+
 
 class FindASINTest(TestCase):
     def test_it_works(self):
