@@ -30,8 +30,6 @@ def parse_sheet(sheet, url=None):
             key=sheet['key'],
             worksheet_id=sheet['worksheet_id'],
         )
-        qs = Item.delete().where(Item.comparison == comparison)
-        qs.execute()
     except Comparison.DoesNotExist:
         comparison = Comparison.create(
             key=sheet['key'],
@@ -53,6 +51,8 @@ def parse_sheet(sheet, url=None):
                 asin=product,
                 hash=hash,
                 retrieved=import_start)
+    Item.delete().where(Item.comparison == comparison and
+            Item.retrieved < import_start).execute()
 
     return comparison
 
