@@ -19,7 +19,8 @@ def datahash(row):
     """Get a hash for a row of data."""
     m = md5()
     for x in row:
-        m.update(x)
+        if x is not None:
+            m.update(x)
     return m.hexdigest()[:8]
 
 

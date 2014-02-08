@@ -18,6 +18,10 @@ class DatahashTest(TestCase):
         self.assertEqual(utils.datahash(['a', 'bc']), h1)
         self.assertEqual(utils.datahash(['ab', 'c']), h1)
 
+    def test_handles_none(self):
+        row = ['a', 'b', None]
+        self.assertTrue(utils.datahash(row))
+
 
 class ParseSheetTest(TestCase):
     """parse_sheet()"""
