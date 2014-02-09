@@ -6,7 +6,7 @@ from flask import (
 
 from . import app
 from .forms import SubmitEntry
-from .models import Comparison
+from .models import Comparison, Item
 from .utils import parse_url
 
 
@@ -61,3 +61,9 @@ def crap_price(pk):
     crap = Comparison.get(Comparison.id == pk)
     crap.get_amazon_meta()
     return redirect(url_for('crap_detail', pk=crap.id))
+
+
+@app.route('/items/')
+def item_list():
+    queryset = Item.select()
+    return render_template('item_list.html', object_list=queryset)
