@@ -6,6 +6,28 @@ import mock
 from ..views import app, add_crap
 
 
+class IntegrationTest(TestCase):
+    """Just try to hit all the urls and make sure they return something."""
+    def setUp(self):
+        self.ctx = app.test_request_context()
+        self.ctx.push()
+
+    def tearDown(self):
+        self.ctx.pop()
+
+    def test_simple_views_work(self):
+        views_to_try = [
+            'homepage',
+            'crap_list',
+            'item_list',
+        ]
+        c = app.test_client()
+        for view_name in views_to_try:
+            url = url_for(view_name)
+            response = c.get(url)
+            self.assertEqual(response.status_code, 200)
+
+
 class TestAddCrap(TestCase):
     def setUp(self):
         self.view = add_crap
