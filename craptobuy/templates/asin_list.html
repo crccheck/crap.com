@@ -6,7 +6,10 @@
 {% block main %}
   <ul>
     {% for object in object_list %}
-      <li>{{ object }}</li>
+      <li class="item">
+        {{ object }}
+        <span class="price" data-values="{% for price in object.pricehistory %}|{{ price.price }}{% endfor %}"></span>
+      </li>
     {% endfor %}
   </ul>
 {% endblock %}
@@ -14,8 +17,16 @@
 
 {% block extra_script %}{{ super() }}
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-  <script rel="stylesheet" href="{{ url_for('static', filename='vendor/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
   <script>
-
+    $('li.item > span.price').each(function () {
+      var $el = $(this),
+          data = $el.attr('data-values');
+      if (!data) {
+        return;
+      }
+      data = data.substr(1).split('|');
+      $el.sparkline(data, {type: 'line'});
+    });
   </script>
 {% endblock %}
