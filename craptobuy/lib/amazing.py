@@ -37,4 +37,8 @@ def lookup(query):
 def lookup_many(asin_list):
     amazon = get_api()
     query = ','.join(asin_list)
-    return amazon.lookup(ItemId=query)
+    result = amazon.lookup(ItemId=query)
+    if len(asin_list) == 1:
+        # if asin_list isn't really a list, coerce the result to be list-like
+        return [result]
+    return result
