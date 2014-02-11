@@ -72,4 +72,4 @@ def item_list():
 @app.route('/asins/')
 def asin_list():
     queryset = AmazonProduct.select()
-    return render_template('item_list.html', object_list=queryset)
+    return render_template('asin_list.html', object_list=queryset)
