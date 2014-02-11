@@ -20,6 +20,7 @@ class IntegrationTest(TestCase):
             'homepage',
             'crap_list',
             'item_list',
+            'asin_list',
         ]
         c = app.test_client()
         for view_name in views_to_try:

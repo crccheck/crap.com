@@ -6,7 +6,7 @@ from flask import (
 
 from . import app
 from .forms import SubmitEntry
-from .models import Comparison, Item
+from .models import Comparison, Item, AmazonProduct
 from .utils import parse_url
 
 
@@ -66,4 +66,10 @@ def crap_price(pk):
 @app.route('/items/')
 def item_list():
     queryset = Item.select()
+    return render_template('item_list.html', object_list=queryset)
+
+
+@app.route('/asins/')
+def asin_list():
+    queryset = AmazonProduct.select()
     return render_template('item_list.html', object_list=queryset)
