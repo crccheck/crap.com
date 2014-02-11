@@ -10,3 +10,12 @@
     {% endfor %}
   </ul>
 {% endblock %}
+
+
+{% block extra_script %}{{ super() }}
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+  <script rel="stylesheet" href="{{ url_for('static', filename='vendor/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
+  <script>
+
+  </script>
+{% endblock %}
