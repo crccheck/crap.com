@@ -1,4 +1,5 @@
 from flask import (
+    abort,
     render_template,
     redirect,
     url_for,
@@ -43,8 +44,11 @@ def add_crap():
 
 @app.route('/crap/<int:pk>/')
 def crap_detail(pk):
-    crap = Comparison.get(Comparison.id == pk)
-    return render_template('comparison_detail.html', object=crap)
+    try:
+        crap = Comparison.get(Comparison.id == pk)
+        return render_template('comparison_detail.html', object=crap)
+    except Comparison.DoesNotExist:
+        abort(404)
 
 
 @app.route('/crap/<int:pk>/refresh/', methods=('POST', ))
