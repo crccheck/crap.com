@@ -1,3 +1,4 @@
+from __future__ import print_function
 import datetime
 
 from invoke import task
@@ -20,6 +21,7 @@ def scrape():
             # exit loop
             break
         lookup = lookup_many(asin_list)
+        n_found = 0
         for product in lookup:
             if product.price_and_currency and all(product.price_and_currency):
                 PriceHistory.create(
@@ -28,3 +30,5 @@ def scrape():
                     currency=product.price_and_currency[0],
                     retrieved=datetime.datetime.now(),
                 )
+                n_found += 1
+        print('Updated {} out of {} prices'.format(n_found, len(lookup)))
