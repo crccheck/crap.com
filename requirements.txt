@@ -6,8 +6,7 @@ itsdangerous==0.23
 Jinja2==2.7.2
 MarkupSafe==0.18
 requests==2.2.1
-# peewee==2.1.8
-https://github.com/coleifer/peewee/tarball/master
+peewee==2.2.1
 project-runpy==0.1.1
 psycopg2==2.5.2
 python-dateutil==2.2
