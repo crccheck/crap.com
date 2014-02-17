@@ -14,7 +14,10 @@
           {{ object }}
         </td>
         <td>
-          <span class="price" data-values="{% for price in object.pricehistory %}|{{ price.price }}{% endfor %}"></span>
+          {{ object.price }}
+        </td>
+        <td>
+          <span class="price-history" data-values="{% for price in object.pricehistory %}|{{ price.price }}{% endfor %}"></span>
         </td>
       </tr>
     {% endfor %}
@@ -26,7 +29,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
   <script src="{{ url_for('static', filename='vendor/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
   <script>
-    $('span.price').each(function () {
+    $('span.price-history').each(function () {
       var $el = $(this),
           data = $el.attr('data-values');
       if (!data) {
