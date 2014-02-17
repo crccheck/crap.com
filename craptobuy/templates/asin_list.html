@@ -4,14 +4,18 @@
 {% block page_title %}List{% endblock %}
 
 {% block main %}
-  <ul>
+  <table>
     {% for object in object_list %}
-      <li class="item">
-        {{ object }}
-        <span class="price" data-values="{% for price in object.pricehistory %}|{{ price.price }}{% endfor %}"></span>
-      </li>
+      <tr class="item">
+        <td>
+          {{ object }}
+        </td>
+        <td>
+          <span class="price" data-values="{% for price in object.pricehistory %}|{{ price.price }}{% endfor %}"></span>
+        </td>
+      </tr>
     {% endfor %}
-  </ul>
+  </table>
 {% endblock %}
 
 
@@ -19,7 +23,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
   <script src="{{ url_for('static', filename='vendor/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
   <script>
-    $('li.item > span.price').each(function () {
+    $('span.price').each(function () {
       var $el = $(this),
           data = $el.attr('data-values');
       if (!data) {
