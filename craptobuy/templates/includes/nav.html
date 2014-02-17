@@ -3,6 +3,10 @@
     <a href="/"><strong>Crap</strong></a>
     <i class="fa fa-angle-right"></i>
     <a href="{{ url_for('crap_list') }}">All</a>
+    <i class="fa fa-asterisk"></i>
+    <a href="{{ url_for('item_list') }}">All Items</a>
+    <i class="fa fa-asterisk"></i>
+    <a href="{{ url_for('asin_list') }}">All Prices</a>
   </div>
   <div class="account">
     {% if session['user'] %}
